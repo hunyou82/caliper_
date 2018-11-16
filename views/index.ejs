@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html ng-app="angularApp">
+
+<head>
+  <title>SLS</title>
+  <link rel="shortcut icon" href="/www/images/www-icon-selffox.ico"/>
+  <link rel="icon" href="/www/images/www-icon-selffox.ico"/>
+  <meta charset='UTF-8'/>
+  <meta http-equiv='X-UA-Compatible' content='IE=9,chrome=1'/>
+  <!-- <meta name='viewport' content='width=device-width, initial-scale=1.0'/> -->
+  <meta http-equiv='cache-control' content='no-cache'>
+  <meta http-equiv='expires' content='-1'>
+  <meta http-equiv='pragma' content='no-cache'>  
+  <style>
+  </style>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.4/angular.min.js"></script>
+
+  <script type='text/javascript' charset='utf-8'>
+    var __profile = {};
+
+    <% if (typeof profile != 'undefined') { %>
+        __profile = <%- JSON.stringify(profile) || {} %>;
+    <% } %>
+
+    console.log(__profile.id);
+  </script>
+
+  <script src="/javascripts/caliperjs/caliperSensor-1.1.1.js"></script>  
+  <script src="/javascripts/caliperjs/init.js"></script>
+  <script src="/javascripts/caliperjs/appContextService.js"></script>
+  <script src="/javascripts/caliperjs/appSensorService.js"></script>
+
+
+  <script src="/javascripts/angular/index.js"></script>
+
+  <script>
+    /*$( document ).ready(function() {
+      // Initialize Caliper sensor
+      var sensor = Caliper.Sensor;
+      sensor.initialize("http://example.org/sensors/1");
+
+      // Override default HTTP options
+      var options = Caliper.Clients.HttpOptions;
+      //options.uri = "https://example.edu/caliper/target/endpoint";
+      options.uri = "http://caliper.esls.io";
+      options.headers["Authorization"] = "40dI6P62Q_qrWxpTk95z8w";
+      options.headers["Content-Type"] = "application/json";
+
+      // Initialize and register client
+      var client = Caliper.Clients.HttpClient;
+      client.initialize("http://example.org/sensors/1/clients/2", options);
+      sensor.registerClient(client);
+
+      // Set Event property values
+      // Note: only actor, action, and object property assignments shown
+      var actor = Caliper.Entities.EntityFactory(Caliper.Entities.Person, {id: "https://example.edu/users/554433"});
+      var action = Caliper.Actions.started.term;
+      var obj = Caliper.Entities.EntityFactory().create(Caliper.Entities.Document, {
+        id: "https://example.edu/terms/201801/courses/7/sections/1/assess/1",
+        dateToStartOn: "2018-08-16T05:00:00.000Z",
+        dateToSubmit: "2018-09-28T11:59:59.000Z",
+        maxAttempts: 1,
+        maxScore: 25.0
+        // ... add additional optional property assignments
+      });
+
+      // Event identifier
+      var id = "urn:uuid:d4618c23-d612-4709-8d9a-478d87808067";
+
+      var edApp = Caliper.Entities.EntityFactory().create(Caliper.Entities.SoftwareApplication, {
+        id: "https://imsglobal.org/sampleCaliperApp",
+        name: "Sample Caliper App",
+        dateCreated: "2018-09-28T11:59:59.000Z",
+      });
+
+      var course = Caliper.Entities.EntityFactory().create(Caliper.Entities.CourseSection, {
+        id: "COURSE_IRI",
+        courseNumber: "Phy-101",
+        academicSession: "Fall-2017",
+        name: "Martin",
+        description: "This is a Physics course for beginners.",
+        dateCreated: "2018-09-28T11:59:59.000Z",
+        dateModified: "2018-09-28T11:59:59.000Z",
+      });
+
+      var membership = function() {
+        //var member = getUser();
+        //var organization = getCourse();
+
+        return Caliper.Entities.EntityFactory().create(Caliper.Entities.Membership, {
+          id: COURSE_IRI + "/roster/554433",
+          description: "Roster entry",
+          member: "martin",
+          organization: course,
+          roles: [Caliper.Entities.Role.learner.term],
+          status: Caliper.Entities.Status.active.term,
+          dateCreated: "2018-09-28T11:59:59.000Z"
+        });
+      };
+
+      var sessionStart = new Date().toISOString();
+      var session = Caliper.Entities.EntityFactory().create(Caliper.Entities.Session, {
+        id: "https://imsglobal.org/sampleCaliperApp//session-123456789",
+        name: "session-123456789",
+        user: actor,
+        dateCreated: sessionStart,
+        startedAtTime: sessionStart
+      });
+
+      // Create Event
+      var event = Caliper.Entities.EntityFactory().create(Caliper.Events.AssessmentEvent, {
+        id: id,
+        actor: actor,
+        action: action,
+        object: obj,
+        eventTime: new Date().toISOString(),
+        edApp: edApp,
+        group: course,
+        membership: membership,
+        session: session
+      });
+
+      var opts = {sensor: sensor.getId(), data: event};
+      var envelope = sensor.createEnvelope(opts);
+
+      sensor.sendToClient(client, envelope);
+
+      $('#area').html(JSON.stringify(event));
+    });*/    
+    $( document ).ready(function() {
+      //CALIPER.init();
+      var params = {};
+      CALIPER.startSession(params);
+      $('#area').html(JSON.stringify(CALIPER.json));          
+
+    });
+
+    annotationEvent = function() { // todo 페이지 reload
+      var params = {
+        id: __profile.id
+      };
+
+      CALIPER.annotationEvent(params);      
+      $('#area').html(JSON.stringify(CALIPER.json));
+    }
+  </script>
+</head>
+<body>
+  <div ng-controller="indexCtrl as app">
+      <center>
+         <h2>Caliper</h2>
+             <br />
+         <h3>Enter your name below:</h3>
+         <input type="text" ng-model="name1" placeholder="Scope variable name" />
+             <br /><br />
+         <h2 ng-if="name1 != ''"> Hello {{name1}} </h2>
+             <br />
+      </center>
+      <input type="button" id="Annotation" value="Annotation" onclick="annotationEvent()"></input>&nbsp;<input type="button" id="Assessment" value="Assessment"></input>
+      <input type="button" id="Assignable" value="Assignable"></input>&nbsp;<input type="button" id="Forum" value="Forum"></input>
+      </br></br>
+      <div id="area">{profile}</div>
+      <div id="area">{profile}</div>
+  </div>
+</body>
+</html>
